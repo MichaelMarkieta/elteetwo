@@ -6,8 +6,8 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 # Set page config
-st.set_page_config(page_title="Lactate Threshold Dashboard", layout="wide")
-st.title("🏃‍♂️ Lactate Threshold Historical Dashboard (2023 - 2025)")
+st.set_page_config(page_title="Lactate Threshold Testing History", layout="wide")
+st.title("Lactate Threshold Testing History")
 st.markdown(
     "Cross-examine step-test curves, longitudinal threshold shifts, and training zones over the last 3 years."
 )
