@@ -112,63 +112,57 @@ tab1, tab2, tab3 = st.tabs(
 )
 
 # --- TAB 1: CURVE OVERLAP MATRIX ---
+# --- TAB 1: CURVE OVERLAP MATRIX ---
 with tab1:
     st.subheader("Raw Step-Test Curve Comparison")
-    st.markdown(
-        "Select specific test dates to superimpose your lactate and heart rate curves."
-    )
-
-    selected_dates = st.multiselect(
-        "Select test dates to overlay:",
-        list(raw_curves.keys()),
-        default=list(raw_curves.keys())[-2:],
-    )
-
+    st.markdown("Select specific test dates to superimpose your lactate and heart rate curves.")
+    
+    selected_dates = st.multiselect("Select test dates to overlay:", list(raw_curves.keys()), default=list(raw_curves.keys())[-2:])
+    
+    # Add toggles side-by-side
+    t_col1, t_col2 = st.columns(2)
+    with t_col1:
+        show_lactate = st.toggle("Show Blood Lactate", value=True)
+    with t_col2:
+        show_hr = st.toggle("Show Heart Rate", value=True)
+    
     if selected_dates:
         fig_curve = make_subplots(specs=[[{"secondary_y": True}]])
-
-        colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
-
+        
+        colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+        
         for i, date in enumerate(selected_dates):
             df_stage = raw_curves[date]
             color = colors[i % len(colors)]
-
-            # Lactate Curve (Solid line)
-            fig_curve.add_trace(
-                go.Scatter(
-                    x=df_stage["Speed"],
-                    y=df_stage["Lactate"],
-                    name=f"Lactate ({date})",
-                    line=dict(color=color, width=3),
-                    mode="lines+markers",
-                ),
-                secondary_y=False,
-            )
-            # Heart Rate Curve (Dashed line)
-            fig_curve.add_trace(
-                go.Scatter(
-                    x=df_stage["Speed"],
-                    y=df_stage["HR"],
-                    name=f"HR ({date})",
-                    line=dict(color=color, width=2, dash="dash"),
-                    mode="lines+markers",
-                    opacity=0.6,
-                ),
-                secondary_y=True,
-            )
-
+            
+            # Conditionally render Lactate Curve
+            if show_lactate:
+                fig_curve.add_trace(
+                    go.Scatter(x=df_stage["Speed"], y=df_stage["Lactate"], name=f"Lactate ({date})",
+                               line=dict(color=color, width=3), mode='lines+markers'),
+                    secondary_y=False
+                )
+                
+            # Conditionally render Heart Rate Curve
+            if show_hr:
+                fig_curve.add_trace(
+                    go.Scatter(x=df_stage["Speed"], y=df_stage["HR"], name=f"HR ({date})",
+                               line=dict(color=color, width=2, dash='dash'), mode='lines+markers', opacity=0.6),
+                    secondary_y=True
+                )
+                
         fig_curve.update_xaxes(title_text="Treadmill Speed (km/h)")
+        
+        # Logarithmic Y-axis for Lactate
         fig_curve.update_yaxes(
             title_text="Blood Lactate (mmol/L)", 
             type="log", 
-            tickvals=[1, 1.5, 2, 3, 4, 6, 8, 12],  # Forces markers at these exact mmol values
+            tickvals=[1, 1.5, 2, 3, 4, 6, 8, 12],
             secondary_y=False
         )
         fig_curve.update_yaxes(title_text="Heart Rate (bpm)", secondary_y=True)
-        fig_curve.update_layout(
-            height=600, hovermode="x unified", legend=dict(x=0.01, y=0.99)
-        )
-
+        fig_curve.update_layout(height=600, hovermode="x unified", legend=dict(x=0.01, y=0.99))
+        
         st.plotly_chart(fig_curve, use_container_width=True)
     else:
         st.warning("Please select at least one test date.")
