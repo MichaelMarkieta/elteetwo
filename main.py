@@ -64,8 +64,12 @@ thresholds_data = [
         "LT2_HR": 184,
     },
 ]
+# Summary Threshold Data
 df_thresh = pd.DataFrame(thresholds_data)
 df_thresh["Date_Parsed"] = pd.to_datetime(df_thresh["Date"])
+
+# Sort the DataFrame ascending by date to guarantee chronological plotting
+df_thresh = df_thresh.sort_values("Date_Parsed", ascending=True).reset_index(drop=True)
 
 # Raw Stage Curve Data
 raw_curves = {
@@ -119,6 +123,9 @@ with tab1:
     st.markdown("Select specific test dates to superimpose your lactate and heart rate curves.")
     
     selected_dates = st.multiselect("Select test dates to overlay:", list(raw_curves.keys()), default=list(raw_curves.keys())[-2:])
+    
+    # Force the series into ascending chronological order
+    selected_dates = sorted(selected_dates)
     
     # Add toggles side-by-side
     t_col1, t_col2, t_col3 = st.columns(3)
