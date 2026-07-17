@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
+from scipy.optimize import curve_fit
 
 # Set page config
 st.set_page_config(page_title="Lactate Threshold Dashboard", layout="wide")
@@ -126,13 +127,28 @@ with tab1:
     with t_col2:
         show_hr = st.toggle("Show Heart Rate", value=True)
         
-    # SMOOTHING FUNCTION
-    def get_smooth_curve(x, y, degree=3, points=100):
-        """Calculates a polynomial line of best fit for smooth plotting."""
-        coefficients = np.polyfit(x, y, degree)
-        poly_func = np.poly1d(coefficients)
+    def lactate_exp_model(x, a, b, c):
+        """Exponential growth function for physiological lactate accumulation."""
+        return a + b * np.exp(c * x)
+
+    def get_scientifically_smoothed_curve(x, y, is_lactate=True, points=100):
+        """Applies research-standard regression depending on the metric."""
         x_smooth = np.linspace(min(x), max(x), points)
-        y_smooth = poly_func(x_smooth)
+        
+        if is_lactate:
+            try:
+                # p0 provides initial mathematical guesses for (a, b, c) to help the solver
+                popt, _ = curve_fit(lactate_exp_model, x, y, p0=[1.0, 0.01, 0.5], maxfev=10000)
+                y_smooth = lactate_exp_model(x_smooth, *popt)
+            except RuntimeError:
+                # Fallback to 3rd-degree polynomial if the exponential fit fails to converge on a messy dataset
+                coeffs = np.polyfit(x, y, 3)
+                y_smooth = np.polyval(coeffs, x_smooth)
+        else:
+            # Heart rate response to workload is typically linear or slightly quadratic
+            coeffs = np.polyfit(x, y, 2)
+            y_smooth = np.polyval(coeffs, x_smooth)
+            
         return x_smooth, y_smooth
     
     if selected_dates:
