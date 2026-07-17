@@ -121,11 +121,13 @@ with tab1:
     selected_dates = st.multiselect("Select test dates to overlay:", list(raw_curves.keys()), default=list(raw_curves.keys())[-2:])
     
     # Add toggles side-by-side
-    t_col1, t_col2 = st.columns(2)
+    t_col1, t_col2, t_col3 = st.columns(3)
     with t_col1:
         show_lactate = st.toggle("Show Blood Lactate", value=True)
     with t_col2:
         show_hr = st.toggle("Show Heart Rate", value=True)
+    with t_col3:
+        use_log_scale = st.toggle("Logarithmic Lactate Axis", value=True)
         
     def lactate_exp_model(x, a, b, c):
         """Exponential growth function for physiological lactate accumulation."""
@@ -196,13 +198,21 @@ with tab1:
                 
         fig_curve.update_xaxes(title_text="Treadmill Speed (km/h)")
         
-        # Logarithmic Y-axis for Lactate
-        fig_curve.update_yaxes(
-            title_text="Blood Lactate (mmol/L)", 
-            type="log", 
-            tickvals=[1, 1.5, 2, 3, 4, 6, 8, 12],
-            secondary_y=False
-        )
+        # Toggleable Logarithmic vs Linear Y-axis for Lactate
+        if use_log_scale:
+            fig_curve.update_yaxes(
+                title_text="Blood Lactate (mmol/L)", 
+                type="log", 
+                tickvals=[1, 1.5, 2, 3, 4, 6, 8, 12],
+                secondary_y=False
+            )
+        else:
+            fig_curve.update_yaxes(
+                title_text="Blood Lactate (mmol/L)", 
+                type="linear", 
+                secondary_y=False
+            )
+            
         fig_curve.update_yaxes(title_text="Heart Rate (bpm)", secondary_y=True)
         fig_curve.update_layout(height=600, hovermode="x unified", legend=dict(x=0.01, y=0.99))
         
