@@ -158,7 +158,12 @@ with tab1:
             )
 
         fig_curve.update_xaxes(title_text="Treadmill Speed (km/h)")
-        fig_curve.update_yaxes(title_text="Blood Lactate (mmol/L)", secondary_y=False)
+        fig_curve.update_yaxes(
+            title_text="Blood Lactate (mmol/L)", 
+            type="log", 
+            tickvals=[1, 1.5, 2, 3, 4, 6, 8, 12],  # Forces markers at these exact mmol values
+            secondary_y=False
+        )
         fig_curve.update_yaxes(title_text="Heart Rate (bpm)", secondary_y=True)
         fig_curve.update_layout(
             height=600, hovermode="x unified", legend=dict(x=0.01, y=0.99)
