@@ -125,7 +125,7 @@ with tab1:
     with t_col1:
         show_lactate = st.toggle("Show Blood Lactate", value=True)
     with t_col2:
-        show_hr = st.toggle("Show Heart Rate", value=True)
+        show_hr = st.toggle("Show Heart Rate", value=False)
     with t_col3:
         use_log_scale = st.toggle("Logarithmic Y-Axis", value=False)
         
