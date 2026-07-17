@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import numpy as np
 
 # Set page config
 st.set_page_config(page_title="Lactate Threshold Dashboard", layout="wide")
@@ -112,7 +113,6 @@ tab1, tab2, tab3 = st.tabs(
 )
 
 # --- TAB 1: CURVE OVERLAP MATRIX ---
-# --- TAB 1: CURVE OVERLAP MATRIX ---
 with tab1:
     st.subheader("Raw Step-Test Curve Comparison")
     st.markdown("Select specific test dates to superimpose your lactate and heart rate curves.")
@@ -125,6 +125,15 @@ with tab1:
         show_lactate = st.toggle("Show Blood Lactate", value=True)
     with t_col2:
         show_hr = st.toggle("Show Heart Rate", value=True)
+        
+    # SMOOTHING FUNCTION
+    def get_smooth_curve(x, y, degree=3, points=100):
+        """Calculates a polynomial line of best fit for smooth plotting."""
+        coefficients = np.polyfit(x, y, degree)
+        poly_func = np.poly1d(coefficients)
+        x_smooth = np.linspace(min(x), max(x), points)
+        y_smooth = poly_func(x_smooth)
+        return x_smooth, y_smooth
     
     if selected_dates:
         fig_curve = make_subplots(specs=[[{"secondary_y": True}]])
@@ -137,17 +146,35 @@ with tab1:
             
             # Conditionally render Lactate Curve
             if show_lactate:
+                # 1. Plot the raw data as unconnected dots
                 fig_curve.add_trace(
-                    go.Scatter(x=df_stage["Speed"], y=df_stage["Lactate"], name=f"Lactate ({date})",
-                               line=dict(color=color, width=3), mode='lines+markers'),
+                    go.Scatter(x=df_stage["Speed"], y=df_stage["Lactate"], name=f"Raw Lactate ({date})",
+                               line=dict(color=color), mode='markers', marker=dict(size=8), showlegend=False),
+                    secondary_y=False
+                )
+                
+                # 2. Plot the smoothed line of best fit
+                x_smooth, y_smooth = get_smooth_curve(df_stage["Speed"], df_stage["Lactate"])
+                fig_curve.add_trace(
+                    go.Scatter(x=x_smooth, y=y_smooth, name=f"Lactate Trend ({date})",
+                               line=dict(color=color, width=3, shape='spline'), mode='lines'),
                     secondary_y=False
                 )
                 
             # Conditionally render Heart Rate Curve
             if show_hr:
+                # 1. Plot the raw HR data as unconnected dots
                 fig_curve.add_trace(
-                    go.Scatter(x=df_stage["Speed"], y=df_stage["HR"], name=f"HR ({date})",
-                               line=dict(color=color, width=2, dash='dash'), mode='lines+markers', opacity=0.6),
+                    go.Scatter(x=df_stage["Speed"], y=df_stage["HR"], name=f"Raw HR ({date})",
+                               line=dict(color=color), mode='markers', marker=dict(size=6, symbol='x'), opacity=0.6, showlegend=False),
+                    secondary_y=True
+                )
+                
+                # 2. Plot the smoothed HR line (using degree=2 for HR as it is more linear)
+                hr_x_smooth, hr_y_smooth = get_smooth_curve(df_stage["Speed"], df_stage["HR"], degree=2)
+                fig_curve.add_trace(
+                    go.Scatter(x=hr_x_smooth, y=hr_y_smooth, name=f"HR Trend ({date})",
+                               line=dict(color=color, width=2, dash='dash', shape='spline'), mode='lines', opacity=0.6),
                     secondary_y=True
                 )
                 
