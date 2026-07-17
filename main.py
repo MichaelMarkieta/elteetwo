@@ -169,8 +169,8 @@ with tab1:
                     secondary_y=False
                 )
                 
-                # 2. Plot the smoothed line of best fit
-                x_smooth, y_smooth = get_smooth_curve(df_stage["Speed"], df_stage["Lactate"])
+                # 2. Plot the smoothed exponential line of best fit
+                x_smooth, y_smooth = get_scientifically_smoothed_curve(df_stage["Speed"], df_stage["Lactate"], is_lactate=True)
                 fig_curve.add_trace(
                     go.Scatter(x=x_smooth, y=y_smooth, name=f"Lactate Trend ({date})",
                                line=dict(color=color, width=3, shape='spline'), mode='lines'),
@@ -186,8 +186,8 @@ with tab1:
                     secondary_y=True
                 )
                 
-                # 2. Plot the smoothed HR line (using degree=2 for HR as it is more linear)
-                hr_x_smooth, hr_y_smooth = get_smooth_curve(df_stage["Speed"], df_stage["HR"], degree=2)
+                # 2. Plot the smoothed HR line
+                hr_x_smooth, hr_y_smooth = get_scientifically_smoothed_curve(df_stage["Speed"], df_stage["HR"], is_lactate=False)
                 fig_curve.add_trace(
                     go.Scatter(x=hr_x_smooth, y=hr_y_smooth, name=f"HR Trend ({date})",
                                line=dict(color=color, width=2, dash='dash', shape='spline'), mode='lines', opacity=0.6),
