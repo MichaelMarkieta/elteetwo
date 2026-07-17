@@ -127,7 +127,7 @@ with tab1:
     with t_col2:
         show_hr = st.toggle("Show Heart Rate", value=True)
     with t_col3:
-        use_log_scale = st.toggle("Logarithmic Y-Axis", value=True)
+        use_log_scale = st.toggle("Logarithmic Y-Axis", value=False)
         
     def lactate_exp_model(x, a, b, c):
         """Exponential growth function for physiological lactate accumulation."""
