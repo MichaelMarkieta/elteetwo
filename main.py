@@ -157,9 +157,9 @@ with tab1:
                 secondary_y=True,
             )
 
-        fig_curve.update_xaxis(title_text="Treadmill Speed (km/h)")
-        fig_curve.update_yaxis(title_text="Blood Lactate (mmol/L)", secondary_y=False)
-        fig_curve.update_yaxis(title_text="Heart Rate (bpm)", secondary_y=True)
+        fig_curve.update_xaxes(title_text="Treadmill Speed (km/h)")
+        fig_curve.update_yaxes(title_text="Blood Lactate (mmol/L)", secondary_y=False)
+        fig_curve.update_yaxes(title_text="Heart Rate (bpm)", secondary_y=True)
         fig_curve.update_layout(
             height=600, hovermode="x unified", legend=dict(x=0.01, y=0.99)
         )
@@ -201,7 +201,7 @@ with tab2:
                 textposition="top center",
             )
         )
-        fig_trend.update_yaxis(title_text="Speed (km/h)")
+        fig_trend.update_yaxes(title_text="Speed (km/h)")
     else:
         fig_trend.add_trace(
             go.Scatter(
@@ -221,9 +221,9 @@ with tab2:
                 mode="lines+markers",
             )
         )
-        fig_trend.update_yaxis(title_text="Heart Rate (bpm)")
+        fig_trend.update_yaxes(title_text="Heart Rate (bpm)")
 
-    fig_trend.update_xaxis(title_text="Test Date")
+    fig_trend.update_xaxes(title_text="Test Date")
     fig_trend.update_layout(height=500, hovermode="closest")
     st.plotly_chart(fig_trend, use_container_width=True)
 
