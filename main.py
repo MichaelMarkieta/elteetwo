@@ -18,51 +18,12 @@ st.markdown(
 
 # Summary Threshold Data
 thresholds_data = [
-    {
-        "Date": "2023-07-19",
-        "LT1_Speed": 10.20,
-        "LT1_Pace": "5:53",
-        "LT1_HR": 163,
-        "LT2_Speed": 12.10,
-        "LT2_Pace": "4:58",
-        "LT2_HR": 179,
-    },
-    {
-        "Date": "2024-02-07",
-        "LT1_Speed": 10.56,
-        "LT1_Pace": "5:42",
-        "LT1_HR": 173,
-        "LT2_Speed": 12.31,
-        "LT2_Pace": "4:53",
-        "LT2_HR": 185,
-    },
-    {
-        "Date": "2025-01-15",
-        "LT1_Speed": 11.00,
-        "LT1_Pace": "5:27",
-        "LT1_HR": 171,
-        "LT2_Speed": 12.57,
-        "LT2_Pace": "4:46",
-        "LT2_HR": 181,
-    },
-    {
-        "Date": "2025-05-17",
-        "LT1_Speed": 11.70,
-        "LT1_Pace": "5:08",
-        "LT1_HR": 168,
-        "LT2_Speed": 13.51,
-        "LT2_Pace": "4:26",
-        "LT2_HR": 180,
-    },
-    {
-        "Date": "2025-08-09",
-        "LT1_Speed": 11.60,
-        "LT1_Pace": "5:10",
-        "LT1_HR": 172,
-        "LT2_Speed": 13.62,
-        "LT2_Pace": "4:24",
-        "LT2_HR": 184,
-    },
+    {"Date": "2023-07-19", "LT1_Speed": 10.20, "LT1_Pace": "5:53", "LT1_HR": 163, "LT2_Speed": 12.10, "LT2_Pace": "4:58", "LT2_HR": 179},
+    {"Date": "2024-02-07", "LT1_Speed": 10.56, "LT1_Pace": "5:42", "LT1_HR": 173, "LT2_Speed": 12.31, "LT2_Pace": "4:53", "LT2_HR": 185},
+    {"Date": "2025-01-15", "LT1_Speed": 11.00, "LT1_Pace": "5:27", "LT1_HR": 171, "LT2_Speed": 12.57, "LT2_Pace": "4:46", "LT2_HR": 181},
+    {"Date": "2025-05-17", "LT1_Speed": 11.70, "LT1_Pace": "5:08", "LT1_HR": 168, "LT2_Speed": 13.51, "LT2_Pace": "4:26", "LT2_HR": 180},
+    {"Date": "2025-08-09", "LT1_Speed": 11.60, "LT1_Pace": "5:10", "LT1_HR": 172, "LT2_Speed": 13.62, "LT2_Pace": "4:24", "LT2_HR": 184},
+    {"Date": "2026-07-17", "LT1_Speed": 11.33, "LT1_Pace": "5:18", "LT1_HR": 169, "LT2_Speed": 14.00, "LT2_Pace": "4:17", "LT2_HR": 181},
 ]
 # Summary Threshold Data
 df_thresh = pd.DataFrame(thresholds_data)
